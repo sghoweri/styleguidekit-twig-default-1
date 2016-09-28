@@ -1,0 +1,55 @@
+{{dump(partial.original)}}
+<br><br>
+<br>
+<br>
+
+
+<div id="{{ partial.patternPartial }}" class="sg-pattern c-pattern">
+  <div class="sg-pattern-head c-pattern__head">
+    <h3 class="c-pattern__title">
+      <a href="../../patterns/{{ partial.patternLink }}" class="patternLink c-pattern__link" data-patternpartial="{{ partial.patternPartial }}" title="Link to Pattern">
+        {{ partial.patternName }}
+        
+        {% if partial.patternState %}
+          <span class="c-pattern__state--{{ partial.patternState }} c-pattern__state">
+            {{ partial.patternState }}
+          </span>
+        {% endif %}
+      </a>
+      
+      <a href="../../patterns/{{ partial.patternLink }}" class="patternLink c-pattern__link c-pattern__link--newTab" data-patternpartial="{{ partial.patternPartial }}" title="Open Pattern In New Window" target="_blank">
+        <img src="/images/icons/new-tab.svg" width="48px" height="48px">
+      </a>
+    </h3>
+    
+    <div class="sg-pattern-breadcrumb c-pattern__breadcrumbs">
+      {{ partial.patternBreadcrumb }}
+    </div>
+    
+    
+  </div>
+  
+  <div class="c-pattern__description">
+    {{ partial.patternDesc | raw }}
+  </div>
+  
+
+  
+<div class="sg-pattern-example c-pattern__example">
+  {{ partial.patternPartialCode | raw }}
+</div>
+
+<div class="c-pattern__extra-wrapper">
+  <a href="#" data-patternpartial="{{ partial.patternPartial }}" title="View Pattern Info" id="sg-pattern-extra-toggle-{{partial.patternPartial}}" class="sg-pattern-extra-toggle c-pattern__extra-toggle js-patternlab-code-toggle">
+    <span>&#9660;</span>
+  </a>
+  
+  <div class="sg-pattern-extra c-pattern__extra" id="sg-pattern-extra-{{ partial.patternPartial }}"></div>
+</div>
+    
+  
+  
+  <script type="text/json" id="sg-pattern-data-{{partial.patternPartial}}" class="sg-pattern-data c-pattern__data">
+    {{ partial.patternData | raw }}
+  </script>
+</div><!--end .sg-pattern-->
