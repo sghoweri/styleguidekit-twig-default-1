@@ -1,13 +1,12 @@
-<div id="{{ partial.patternPartial }}" class="sg-subtype c-patternSubType">
-  <h2 class="c-patternSubType__title">
-    <div class="o-wrapper o-wrapper--full">
-      <a href="../../patterns/{{ partial.patternLink }}" class="patternLink c-patternSubType__link" data-patternpartial="{{ partial.patternPartial }}">
-        {{ partial.patternName }}
-      </a>
-    </div>
-  </h2>
+<div id="{{ partial.patternPartial }}" class="sg-subtype">
+  <a href="../../patterns/{{ partial.patternLink }}" class="patternLink" data-patternpartial="{{ partial.patternPartial }}">
+    <h1 class="c-heading c-heading--capitalize c-heading--xxlarge">
+      {{ partial.patternName }}
+    </h1>
+  </a>
   
-  <div class="sg-pattern-body c-patternSubType__description">
+  
+  <div class="sg-pattern-body">
     {{ partial.patternDesc | raw }}
   </div>
 </div>
