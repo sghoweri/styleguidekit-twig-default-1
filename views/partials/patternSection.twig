@@ -1,23 +1,9 @@
 
 
-{% set patternData = partial.patternData | json_encode %}
-
-
-{% if patternData.lineage[0] | length > 0 %}
-  <p class="sg-pattern-lineage">
-    The <strong>{{ partial.patternName }}</strong> pattern contains the following patterns:
-    <span id="sg-code-lineage-fill">
-    
-    </span>
-  </p><!--end .sg-pattern-lineage-->
-{% endif %}
-
-
-
 <div id="{{ partial.patternPartial }}" class="sg-pattern">
   <div class="sg-pattern-head">
-    <a href="../../patterns/{{ partial.patternLink }}" class="patternLink" data-patternpartial="{{ partial.patternPartial }}" title="Link to Pattern">
-      <h2 class="c-heading c-heading--xlarge c-heading--capitalize">
+    <h3 class="c-heading c-heading--xlarge c-heading--capitalize">
+      <a href="../../patterns/{{ partial.patternLink }}" class="patternLink" data-patternpartial="{{ partial.patternPartial }}" title="Link to Pattern">
         {{ partial.patternName }}
         
         {% if partial.patternState %}
@@ -25,47 +11,67 @@
             {{ partial.patternState }}
           </span>
         {% endif %}
-      </h2>
-    </a>
+      </a>
+    </h3>
     
-    
-    
-    
-    
-    
+    {% if partial.patternDesc %}
+      <div class="c-lede c-lead">
+        {{ partial.patternDesc | raw }}
+      </div>
+    {% endif %}
     
     <div class="sg-pattern-breadcrumb">
       {{ partial.patternBreadcrumb }}
     </div>
-    
-    
-    
-    
   </div>
   
-  {% if partial.patternDesc %}
-    <section class="sg-pattern__description">
-      {{ partial.patternDesc | raw }}
-    </section>
-  {% endif %}
-  
-  
-  
+  <div class="c-patternLineages">
+    {% set data = partial.patternData | json_decode() %}
+    {% for key,lineage in data if key == 'lineage' and lineage|length > 0 %}
+      <p class="sg-pattern-lineage c-patternLineage c-patternLineage--contains">
+        The <strong>{{ partial.patternName }}</strong> pattern contains the following pattern{% if lineage|length > 1%}s{% endif %}:
+        <span id="sg-code-lineage-fill">
+          
+        {% for lineageItem in lineage %}
+          {% if loop.last and lineage|length > 1 %}and {% endif %}
+          <a href='{{ lineageItem.lineagePath }}' class='{% if lineageItem.lineageState %}sg-pattern-state {{ lineageItem.lineageState }}{% endif %}' data-patternPartial='{{ lineageItem.lineagePattern }}'>{{ lineageItem.lineagePattern }}</a>{% if loop.last == false %},{% endif %}
+        {% endfor %}
+        </span>
+      </p><!--end .sg-pattern-lineage-->
+    {% endfor %}
     
+    {% for key,lineageR in data if key == 'lineageR' and lineageR|length > 0 %}
+      <p class="sg-pattern-lineage c-patternLineage c-patternLineage--included">
+        The <strong>{{ partial.patternName }}</strong> pattern is included in the following pattern{% if lineageR|length > 1%}s{% endif %}:
+        <span id="sg-code-lineager-fill">
+        {% for item in lineageR %}
+          {% if loop.last %}and {% endif %}
+          <a href='{{ item.lineagePath }}' class='{% if item.lineageState %}sg-pattern-state {{ item.lineageState }}{% endif %}' data-patternPartial='{{ item.lineagePattern }}'>{{ item.lineagePattern }}</a>{% if loop.last == false %},{% endif %}
+        {% endfor %}
+        </span>
+      </p><!--end .sg-pattern-lineage-->
+    {% endfor %}
+  </div>
+  
   <div class="sg-pattern-example">
-    {{ partial.patternPartialCode | tidy | raw }}
+    {{ partial.patternPartialCode | raw }}
   </div>
   
+
   
-  <div class="sg-pattern-extra-wrapper">
-    <div class="sg-pattern-extra" id="sg-pattern-extra-{{ partial.patternPartial }}"></div>
-    
+  
+  <div class="sg-pattern-example-wrapper" style="position: relative;">
     <a href="#" data-patternpartial="{{ partial.patternPartial }}" title="View Pattern Info" id="sg-pattern-extra-toggle-{{partial.patternPartial}}" class="sg-pattern-extra-toggle">
-      Toggle Code <span>&#9660;</span>
+      Show / hide code </>
+      <!-- <span>&#9660;</span> -->
     </a>
-    
-    <div class="sg-pattern-extra__fade-out"</div>
+    <div class="sg-pattern-extra s-styleguide-viewall" id="sg-pattern-extra-{{ partial.patternPartial }}"></div>
   </div>
+  
+  
+  
+  
+
   
   <script type="text/json" id="sg-pattern-data-{{partial.patternPartial}}" class="sg-pattern-data">
     {{ partial.patternData | raw }}

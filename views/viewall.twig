@@ -1,109 +1,22 @@
 <!-- View All Patterns in a Pattern Sub-Type -->
-
-{% set patternTypes = partials[0].navItems.patternTypes %}
-{% set currentPatternName = partials[0].patternName %}
-<div style="width: 100%; flex: 1; background-color: #f7f7f7;">
-
-  <div class="sg-main" role="main">
-    <div class="o-grid o-grid--xlarge">
-    
-      <nav class="o-grid__item u-1/4">
-      {% if patternTypes %}
-      
-      <div class="c-styleguide-shelf">
-        
-            {% for patternType in patternTypes %}
-            <details open>
-              <summary>{{ patternType.patternTypeLC }}</summary>
-              <ul>
-                {% for item in patternType.patternItems if item.patternName|lower != "view all" %}
-                  <li>
-                    <a href="/patterns/{{ item.patternPath }}" data-patternpartial="{{ item.patternPartial }}">
-                    {{ item.patternName }}
-                    </a>
-                  </li>
-                {% endfor %}
-                
-                
-                
-                {% for item in patternType.patternTypeItems %}
-                
-                  {% set patterns = item %}
-                  {% set patternGroupName = patterns.patternSubtypeUC %}
-                  
-                  
-                  
-                  
-                    <li class="c-styleguide-nav__item {% if patternGroupName|lower == currentPatternName|lower %}is-active{% endif %}">
-                    
-                        {% set patternNameLength = patternGroupName|length - 1 %}
-                        {% set defaultPatternName = patternGroupName|slice(0, patternNameLength) %}
-                        
-                        {% set defaultPattern = {} %}
-                        {% set viewAllPattern = {} %}
-                        
-                        {% for pattern in patterns.patternSubtypeItems %}
-                          {% if pattern.patternName|lower == defaultPatternName|lower  %}
-                            {% set defaultPattern = pattern %}
-                            {% set defaultPatternNumber = loop.index0 %}
-                            
-                          {% elseif pattern.patternName|lower == patternGroupName|lower %}
-                            {% set defaultPattern = pattern %}
-                            {% set defaultPatternNumber = loop.index0 %}
-                            
-                            
-                          {% elseif pattern.patternName|lower == "view all" %}
-                            {% set viewAllPattern = pattern %}
-                          {% endif %}
-                        {% endfor %}
-                        
-                        
-                        {% for pattern in patterns.patternSubtypeItems %}
-                          {% if pattern.patternName|lower == "view all" %}
-                            <a href="/patterns/{{ pattern.patternPath }}" data-patternpartial="{{ pattern.patternPartial }}" class="c-styleguide-nav__link {% if patternGroupName|lower == currentPatternName|lower %}is-active{% endif %}">
-                                {{ patternGroupName }}
-                            </a>
-                          {% endif %}
-                        {% endfor %}
-                        
-                        
-                        
-                        {% if patternGroupName|lower == currentPatternName|lower and patterns.patternSubtypeItems|length > 2 %}
-                        
-                          <section>
-                              <ul>
-                              {% for pattern in patterns.patternSubtypeItems %}
-                                  {% if pattern.patternName|lower != "view all" and pattern.patternName|lower != defaultPattern.patternName|lower %}
-                                    <li>
-                                      <a class="c-styleguide-nav__link" href="/patterns/{{ pattern.patternPath }}" data-patternpartial="{{ pattern.patternPartial }}">
-                                      {{ pattern.patternName }}
-                                      </a>
-                                    </li>
-                                  {% endif %}
-                              {% endfor %}
-                              </ul>
-                            </section>
-                          {% endif %}
-                          
-                    
-                    </li>
-                  
-                  
-                  {% endfor %}
-                  
-                </ul>
-                
-              </details>
-            
+<div class="o-wrapper u-1/1">
+  {% grid %}
+    {% cell "u-1/1 u-1/3@small u-1/4@medium" %}
+      <div class="sg-main sg-sticky-nav">
+        <ul class="o-ui-list">
+          {% for partial in partials if partial.patternSectionSubtype == false %}
+          <li class="o-ui-list__item">
+            <a href="#{{ partial.patternPartial }}">{{ partial.patternName }}</a>
+          </li>
           {% endfor %}
-        
-      {% endif %}
-      
-    </div>
-      </nav>
-      
-      <div id="sg-patterns" class="o-grid__item u-3/4">
-        <div class="o-island o-island--large" style="box-shadow: 0 0 4px rgba(0,0,0,.0175),0 4px 8px rgba(0,0,0,.035); background-color: white;">
+        </ul>
+      </div>
+    {% endcell %}
+
+    {% cell "u-1/1 u-2/3@small u-3/4@medium" %}
+      <div class="sg-main" role="main">
+        <!-- Patterns -->
+        <div id="sg-patterns">
           {% for partial in partials %}
             {% if partial.patternSectionSubtype %}
               {% include "patternSectionSubtype.twig" %}
@@ -111,11 +24,8 @@
               {% include "patternSection.twig" %}
             {% endif %}
           {% endfor %}
-        </div>
-      </div> <!--end #sg-patterns-->
-      
-      
-    </div>
-  </div><!--end .sg-main-->
-  
+        </div> <!--end #sg-patterns-->
+      </div><!--end .sg-main-->
+    {% endcell %}
+  {% endgrid %}
 </div>
