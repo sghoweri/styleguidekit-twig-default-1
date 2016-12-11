@@ -1,17 +1,84 @@
 <!-- View All Patterns in a Pattern Sub-Type -->
-<div class="o-wrapper u-1/1">
-  {% grid %}
-    {% cell "u-1/1 u-1/3@small u-1/4@medium" %}
-      <div class="sg-main sg-sticky-nav">
-        <ul class="o-ui-list">
-          {% for partial in partials if partial.patternSectionSubtype == false %}
-          <li class="o-ui-list__item">
-            <a href="#{{ partial.patternPartial }}">{{ partial.patternName }}</a>
-          </li>
+
+<div class="o-wrapper u-1/1 u-margin-top-large">
+  {% grid "o-grid--xlarge" %}
+    <div class="o-grid__item u-1/1 u-1/3@small u-1/4@medium sg-sticky-nav" id="sidemenu">
+    
+    {% set sections = [] %}
+    
+    {% for partial in partials if partial.patternSectionSubtype == false %}
+      {% set sectionHeader = (partial.patternData|json_decode()).patternBreadcrumb.patternSubtype %}
+
+      {% if sectionHeader not in sections %}
+        {% set sections = sections|merge([sectionHeader]) %}
+      {% endif %}
+    {% endfor %}
+    
+    
+    {% for sectionName in sections %}
+      
+      {% set numberOfPatterns = 0 %}
+      
+      {% for partial in partials if partial.patternSectionSubtype == false %}
+        {% set patternSubtype = (partial.patternData|json_decode()).patternBreadcrumb.patternSubtype %}
+        
+        {% if patternSubtype == sectionName %}
+          {% set numberOfPatterns = numberOfPatterns + 1 %}
+        {% endif %}
+      {% endfor %}
+      
+      {% set sectionHref = '' %}
+      
+      {% for partial in partials if partial.patternSectionSubtype == true and partial.patternName == sectionName %}
+        {% set sectionHref = '#' ~ partial.patternPartial %}
+      {% endfor %}
+      
+      {% embed "02-molecules/accordions/accordion.twig" with {
+        accordion: {
+          type: "checkbox",
+          classes: "u-margin-bottom",
+          checked: true,
+          header_href: sectionHref,
+          header_type: 'a',
+          content_classes: "t-light-gray",
+          header_text: sectionName|capitalize ~ ' (' ~ numberOfPatterns ~ ')',
+          header_text_classes: 'c-accordion__header-text--uppercase'
+        },
+        accordion_header_reversed: true,
+      } %}
+        {% block accordion_header_icon %}
+          {% include "01-atoms/icons/_icon.twig" with {
+            icon: {
+              name: 'link',
+              classes: 'c-icon--small'
+            }
+          } %}
+        {% endblock %}
+      
+      
+        {% block accordion_content %}
+            
+          <ul class="o-bare-list o-menu-list">
+            {% for partial in partials if partial.patternSectionSubtype == false %}
+            
+            {% set patternSubtype = (partial.patternData|json_decode()).patternBreadcrumb.patternSubtype %}
+            
+            {% if patternSubtype == sectionName %}
+              <li class="c-menu__item">
+                <a class="c-menu__link c-menu__link--full" href="#{{ partial.patternPartial }}">{{ partial.patternName|capitalize }}</a>
+              </li>
+            {% endif %}
           {% endfor %}
-        </ul>
-      </div>
-    {% endcell %}
+          </ul>
+        
+        {% endblock %}
+      {% endembed %}
+    {% endfor %}
+      
+    
+      
+  </div>
+    
 
     {% cell "u-1/1 u-2/3@small u-3/4@medium" %}
       <div class="sg-main" role="main">
