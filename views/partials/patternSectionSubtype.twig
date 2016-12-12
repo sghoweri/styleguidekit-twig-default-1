@@ -1,9 +1,18 @@
 <div id="{{ partial.patternPartial }}" class="sg-subtype">
-  <a href="../../patterns/{{ partial.patternLink }}" class="patternLink" data-patternpartial="{{ partial.patternPartial }}">
-    <h1 class="c-heading c-heading--capitalize c-heading--xxlarge">
+  
+  <h1 class="c-headline c-headline--capitalize c-headline--xxlarge">
+    <span class="c-headline__text">
       {{ partial.patternName }}
-    </h1>
-  </a>
+    </span>
+    
+    <a href="../../patterns/{{ partial.patternLink }}" class="patternLink u-margin-left" data-patternpartial="{{ partial.patternPartial }}" title="View as a standalone page">
+      {% include "01-atoms/icons/_icon.twig" with {
+        icon: {
+          name: "external"
+        }
+      } %}
+    </a>
+  </h1>
   
   
   <div class="sg-pattern-body">
