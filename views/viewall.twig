@@ -47,12 +47,9 @@
         accordion_header_reversed: true,
       } %}
         {% block accordion_header_icon %}
-          {% include "01-atoms/icons/_icon.twig" with {
-            icon: {
-              name: 'link',
-              classes: 'c-icon--small'
-            }
-          } %}
+          <svg class="o-icon o-icon--small" viewBox="0 0 24 24">
+            <use xlink:href="#link" />
+          </svg>
         {% endblock %}
       
       

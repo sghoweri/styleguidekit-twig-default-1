@@ -6,11 +6,9 @@
     </span>
     
     <a href="../../patterns/{{ partial.patternLink }}" class="patternLink u-margin-left" data-patternpartial="{{ partial.patternPartial }}" title="View as a standalone page">
-      {% include "01-atoms/icons/_icon.twig" with {
-        icon: {
-          name: "external"
-        }
-      } %}
+      <svg class="o-icon" viewBox="0 0 24 24">
+        <use xlink:href="#external" />
+      </svg>
     </a>
   </h1>
   
