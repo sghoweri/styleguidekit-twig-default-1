@@ -1,0 +1,47 @@
+{% set accordion_uuid = accordion_uuid | default("ac-#{random(9000)}") %}
+{% set accordion_type = accordion_type | default("checkbox") %}
+{% set accordion_header_type = accordion.header_type | default("label") %}
+
+<div class="c-accordion {{ accordion.classes }}" role="tablist">
+      <input
+        class="c-accordion__trigger"
+        type="{{ accordion.type |default(accordion_type) }}"
+        id="{{ accordion_uuid }}"
+        {% if accordion.checked %}checked {% endif %}
+      >
+
+      <{{ accordion_header_type }}
+        class="c-accordion__header {{ accordion.header_classes }}
+        {% if accordion_header_reversed %} c-accordion__header--rev {% endif %}
+        {% if accordion_header_nested %} t-royal-blue {% endif %}" 
+
+        {% if accordion_header_type == "a" %}
+          href="{{ accordion.header_href | default("#") }}"
+        {% endif %}
+
+        role="tab"
+        for="{{ accordion_uuid }}"
+      >
+
+      {% set header_icon = block('accordion_header_icon') %}
+      {% if header_icon is not empty %}
+        <span class="c-accordion__icon-wrapper">
+          {% block accordion_header_icon %}
+            <span class="c-accordion__icon"></span>
+          {% endblock %}
+        </span>
+      {% endif %}
+
+        <span class="o-flag__body c-headline--h4 c-accordion__header-text {{ accordion.header_text_classes }}">
+          {{ accordion.header_text | default("Accordion Header Text")|raw }}
+        </span>
+      </{{ accordion_header_type }}>
+      <div class="c-accordion__content-wrapper">
+        <div class="c-accordion__content {{ accordion.content_classes }}">
+          {% block accordion_content %}
+            Default Accordion Content
+          {% endblock %}
+
+        </div>
+    </div>
+</div>
